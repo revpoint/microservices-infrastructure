@@ -1,0 +1,85 @@
+- name: generate CAdvisor systemd service file (may take a while when run first time)
+  sudo: yes
+  template:
+    src: cadvisor-service.j2 
+    dest: "/usr/lib/systemd/system/{{ cadvisor_service }}.service"
+  notify: 
+    - register cadvisor service
+    - reload systemd daemon 
+  tags: 
+    - cadvisor
+
+- meta: flush_handlers
+
+
+- name: create collectd config directory
+  sudo: yes
+  file:
+    path: /etc/collectd
+    state: directory
+    mode: 0770
+  tags: 
+  - collectd
+
+- name: create collectd conf.d directory
+  sudo: yes
+  file:
+    path: /etc/collectd/conf.d
+    state: directory
+    mode: 0770
+  tags: 
+  - collectd
+
+- name: deploy collectd configuration files
+  sudo: yes
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: u=r
+  with_items:
+    - src: roles/monitoring/files/cadvisor.yaml
+      dest: /etc/collectd/cadvisor.yaml
+    - src: roles/monitoring/files/cadvisor-cli.yaml
+      dest: /etc/collectd/cadvisor-cli.yaml
+    - src: roles/monitoring/files/mesos.yaml
+      dest: /etc/collectd/mesos.yaml
+    - src: roles/monitoring/files/cadvisor-exec.conf
+      dest: /etc/collectd/conf.d/cadvisor-exec.conf
+    - src: roles/monitoring/files/cadvisor-plugin.conf
+      dest: /etc/collectd/conf.d/cadvisor-plugin.conf
+    - src: roles/monitoring/files/stdout.conf
+      dest: /etc/collectd/conf.d/mesos.yaml
+    - src: roles/monitoring/files/syslog.conf
+      dest: /etc/collectd/conf.d/syslog.conf
+  tags:
+    - collectd
+
+- name: deploy collectd daemon configuration
+  sudo: yes
+  template:
+    src: collectd.conf.j2
+    dest: /etc/collectd/collectd.conf
+  tags:
+    - collectd
+
+- name: deploy collectd network plugin configuration
+  sudo: yes
+  template:
+    src: write_network.conf.j2
+    dest: /etc/collectd/conf.d/write_network.conf
+  tags:
+    - collectd
+
+
+- name: generate collectd systemd service file (may take a while when run first time)
+  sudo: yes
+  template:
+    src: collectd-service.j2 
+    dest: "/usr/lib/systemd/system/{{ collectd_service }}.service"
+  notify: 
+    - register collectd service
+    - reload systemd daemon 
+  tags: 
+    - collectd
+
+- meta: flush_handlers

@@ -1,0 +1,12 @@
+---
+
+cadvisor_image: google/cadvisor
+cadvisor_image_tag: latest
+cadvisor_ports: "-p 8085:8080"
+cadvisor_service: cadvisor
+cadvisor_container_name: "{{ cadvisor_service }}"
+
+collectd_image: corebug/cadvisor-collectd
+collectd_image_tag: latest
+collectd_service: collectd
+collectd_container_name: "{{ collectd_service }}"

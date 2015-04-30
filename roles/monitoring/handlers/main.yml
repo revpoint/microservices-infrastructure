@@ -1,0 +1,46 @@
+---
+- name: reload systemd daemon
+  sudo: yes 
+  command: /bin/systemctl daemon-reload
+  tags: 
+    - cadvisor 
+
+- name: register cadvisor service
+  sudo: yes 
+  service:  
+    enabled: yes 
+    name: "{{ cadvisor_service }}"
+    state: started 
+  tags:  
+    - cadvisor  
+
+- name: restart cadvisor
+  sudo: yes 
+  service:
+    name: "{{ cadvisor_service }}"
+    state: restarted
+  tags: 
+    - cadvisor
+
+- name: reload systemd daemon
+  sudo: yes 
+  command: /bin/systemctl daemon-reload
+  tags: 
+    - collectd 
+
+- name: register collectd service
+  sudo: yes 
+  service:  
+    enabled: yes 
+    name: "{{ collectd_service }}"
+    state: started 
+  tags:  
+    - collectd  
+
+- name: restart collectd
+  sudo: yes 
+  service:
+    name: "{{ collectd_service }}"
+    state: restarted
+  tags: 
+    - collectd

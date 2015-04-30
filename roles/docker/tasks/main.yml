@@ -8,6 +8,14 @@
   tags:
     - docker
 
+- name: add docker system group
+  sudo: yes
+  group:
+    name: docker
+    state: present
+  tags:
+    - docker
+
 - name: install docker
   sudo: yes
   yum:
