@@ -1,0 +1,40 @@
+input {
+{% if logstash_input_docker %}
+  file {
+    path => "{{ logstash_docker_logs }}/*/*-json.log"
+    type => "docker_log"
+  }
+{% endif %}
+{% if logstash_input_mesos %}
+  file {
+    path => "{{ logstash_mesos_logs }}/*"
+    type => "mesos_log"
+  }
+{% endif %}
+{% if logstash_input_syslog %}
+  syslog {
+    port => 5514
+    type => "syslog"
+  }
+{% endif %}
+{% if logstash_input_collectd %}
+  udp {
+    codec => "collectd"
+    port => 25826
+    type => "collectd"
+  }
+{% endif %}
+}
+
+output {
+{% if logstash_output_stdout %}
+  stdout {
+    codec => rubydebug
+  }
+{% endif %}
+{% if logstash_output_logentries %}
+  logentries {
+    token => "{{ logstash_logentries_token }}"
+  }
+{% endif %}
+}

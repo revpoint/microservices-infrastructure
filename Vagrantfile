@@ -49,7 +49,7 @@ Vagrant.configure(2) do |config|
       "consul_acl_datacenter" => "vagrant",
       "consul_bootstrap_expect" => 1,
       "mesos_cluster" => "vagrant",
-      "mesos_mode" => "mixed"
+      "mesos_mode" => "mixed",
     })
   end
 
