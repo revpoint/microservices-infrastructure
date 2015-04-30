@@ -10,6 +10,7 @@ iptables -N MARATHON
 iptables -A MARATHON -p tcp --dport {{ marathon_port }} -s {% raw %}{{ .Address }}{% endraw %} -j ACCEPT
 {% raw %}{{ end }}{% endraw %}
 iptables -A MARATHON -p tcp --dport {{ marathon_port }} -d 127.0.0.1 -j ACCEPT
-iptables -A MARATHON -p tcp --dport {{ marathon_port }} -j DROP
+{% if enable_firewall|bool %}iptables -A MARATHON -p tcp --dport {{ marathon_port }} -j DROP{% endif %}
+{% if not enable_firewall|bool %}iptables -A MARATHON -p tcp --dport {{ marathon_port }} -j ACCEPT{% endif %}
 
 iptables -A INPUT -p tcp --dport {{ marathon_port }} -j MARATHON

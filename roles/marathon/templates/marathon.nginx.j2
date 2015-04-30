@@ -12,8 +12,9 @@ http {
 	keepalive_timeout	65;
 
 	server {
-		listen {% raw %}{{ env "NGINX_PUBLIC_IP" }}{% endraw %}:{{ marathon_proxy_port }} ssl;
+		listen {% raw %}{{ env "NGINX_PUBLIC_IP" }}{% endraw %}:{{ marathon_proxy_port }}{% if enable_ssl|bool %} ssl{% endif %};
 
+{% if enable_ssl|bool %}
 		ssl_certificate		/etc/nginx/ssl/nginx.cert;
 		ssl_certificate_key	/etc/nginx/ssl/nginx.key;
 
@@ -22,7 +23,7 @@ http {
 		ssl_protocols		TLSv1 TLSv1.1 TLSv1.2;
 		ssl_ciphers		HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
 		ssl_prefer_server_ciphers	on;
-
+{% endif %}
 		error_page 497 https://$host:$server_port$request_uri;
 
 		location / {

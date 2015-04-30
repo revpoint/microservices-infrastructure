@@ -17,8 +17,10 @@
   "ca_file": "/etc/consul/ssl/{{ consul_ca_file }}",
   "cert_file": "/etc/consul/ssl/{{ consul_cert_file }}",
   "key_file": "/etc/consul/ssl/{{ consul_key_file }}",
+{% if enable_ssl|bool %}
   "verify_incoming": true,
   "verify_outgoing": true,
+{% endif %}
   "data_dir": "/var/lib/consul",
   "ui_dir": "/usr/share/consul-ui",
   "disable_remote_exec": {{ consul_disable_remote_exec }}
