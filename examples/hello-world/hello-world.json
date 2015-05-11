@@ -12,6 +12,10 @@
       ]
     }
   },
+  "env": {
+    "SERVICE_NAME": "sites",
+    "SERVICE_TAGS": "backend"
+  },
   "id": "hello-world",
   "instances": 2,
   "cpus": 0.1,

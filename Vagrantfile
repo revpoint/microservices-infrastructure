@@ -28,6 +28,9 @@ Vagrant.configure(2) do |config|
   config.vm.network :forwarded_port, guest: 8500,  host: 8500  # Consul
   config.vm.network :forwarded_port, guest: 8600,  host: 8600  # Consul DNS
 
+  config.vm.network :forwarded_port, guest: 5000,  host: 5000  # Docker Registry
+  config.vm.network :forwarded_port, guest: 8000,  host: 8000  # Application API
+
   # Mesos task ports
   for i in 31000..32000
     config.vm.network :forwarded_port, guest: i, host: i

@@ -1,0 +1,27 @@
+{
+  "id": "nginx-api",
+  "cpus": 0.5,
+  "mem": 64.0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "localhost:5000/nginx-api",
+      "forcePullImage": true,
+      "network": "BRIDGE",
+       "portMappings": [
+         { "containerPort": 8000, "hostPort": 8000, "protocol": "tcp" }
+       ]
+    },
+    "volumes": [
+      {
+        "containerPath": "/etc/nginx/ssl",
+        "hostPath": "/etc/nginx/ssl",
+        "mode": "RW"
+      }
+    ]
+  },
+  "env": {
+    "CONSUL_CONNECT": "10.0.2.15:8500 -auth admin:h4ck3d -ssl -ssl-verify=false -ssl-ca-cert /etc/nginx/ssl/nginx.cert"
+  }
+}
